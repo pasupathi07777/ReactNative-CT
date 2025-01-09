@@ -1,32 +1,30 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
-import {useSelector} from 'react-redux';
-import {loginState} from '../../slices/authSlices/loginSlice';
+import {StyleSheet, ScrollView, TouchableOpacity, Text} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {loginState, logout} from '../../slices/authSlices/loginSlice';
 import StaffProfile from '../../components/StaffProfile';
+import {profileState} from '../../slices/profileSlices/profileSlice';
 
 const DynamicProfile = ({navigation}) => {
   const {currentUser} = useSelector(loginState);
+  const {updateProfileLoading} = useSelector(profileState);
+  const dispatch=useDispatch()
 
-  // Dummy data for staffDetails
-  
   const staffDetails = {
-    name: currentUser.username??"none",
-    email: currentUser.email??"None",
-    phone: currentUser.phone??"None",
+    username: currentUser.username ?? 'none',
+    email: currentUser.email ?? 'None',
+    phone: currentUser.phone ?? 'None',
     subject: 'Mathematics',
-    department:currentUser.department??"None",
-    joiningDate:currentUser.createdAt??"None",
-    bio: currentUser.bio??"None",
-    profileImage: currentUser.profileImage,
-    currentPosition:currentUser.role??"None",
+    department: currentUser.department ?? 'None',
+    joiningDate: currentUser.createdAt ?? 'None',
+    bio: currentUser.bio ?? 'None',
+    profileImage: currentUser.profilePic,
+    currentPosition: currentUser.role ?? 'None',
   };
 
   // Dummy functions for action buttons
   const onEditProfile = () => {
-    navigation.navigate('addStaff');
+    navigation.navigate('editProfile');
   };
 
   const onAddUser = () => {
@@ -54,10 +52,19 @@ const DynamicProfile = ({navigation}) => {
   const onEditPhoto = () => {
     console.log('Go Live clicked');
   };
+  const onLogout = () => {
+dispatch(logout())
+  .unwrap()
+  .then(() => {
+    navigation.navigate("login");
+  });
+
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <StaffProfile
+        updateProfileLoading={updateProfileLoading}
         staffDetails={staffDetails}
         onEditDetails={onEditProfile}
         onAddUser={onAddUser}
@@ -66,7 +73,11 @@ const DynamicProfile = ({navigation}) => {
         onGoLive={onGoLive}
         onEditEmail={onEditEmail}
         onEditPhoto={onEditPhoto}
+        onLogout={onLogout}
       />
+      {/* <TouchableOpacity style={styles.button} onPress={onGoLive}>
+        <Text style={styles.buttonText}>Go Live</Text>
+      </TouchableOpacity> */}
     </ScrollView>
   );
 };
@@ -170,5 +181,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

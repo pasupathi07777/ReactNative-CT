@@ -9,8 +9,8 @@ import {
 } from "../controllers/profileControler.js";
 const router = express.Router();
 
-router.put("/update-data/:userId", updateProfile);
-router.put("/update-photo/:userId", updateProfilePhoto);
+router.put("/update-details", protectRoute, updateProfile);
+router.put("/update-photo",protectRoute, updateProfilePhoto);
 router.post("/verify-email/:userId", verifyEmail);
 router.post("/verify-otp/:userId", verifyOtp);
 

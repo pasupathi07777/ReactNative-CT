@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -12,12 +12,12 @@ import {
   Dimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginState, loginUser } from '../../slices/authSlices/loginSlice';
-const { width, height } = Dimensions.get('window');
+import {useDispatch, useSelector} from 'react-redux';
+import {loginState, loginUser} from '../../slices/authSlices/loginSlice';
+const {width, height} = Dimensions.get('window');
 
-const Login = ({ navigation }) => {
-  const { loginLoading } = useSelector(loginState);
+const Login = ({navigation}) => {
+  const {loginLoading} = useSelector(loginState);
   const dispatch = useDispatch();
   const [loginForm, setLoginForm] = useState({
     email: '',
@@ -25,12 +25,11 @@ const Login = ({ navigation }) => {
     errors: {},
   });
 
-
   const handleChange = (field, value) => {
-    setLoginForm((prev) => ({
+    setLoginForm(prev => ({
       ...prev,
       [field]: value,
-      errors: { ...prev.errors, [field]: '' }, // Clear specific error on input change
+      errors: {...prev.errors, [field]: ''}, 
     }));
   };
 
@@ -48,27 +47,22 @@ const Login = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    // const errors = validateForm();
-    // if (Object.keys(errors).length > 0) {
-    //   setLoginForm((prev) => ({ ...prev, errors }));
-    //   return;
-    // }
 
-     if (
-             
-              !loginForm.email ||
-              !loginForm.password
 
-            ) {
-              Alert.alert('', 'Please fill all fields.');
-              return;
-            }
-    dispatch(loginUser({ email:loginForm.email, password:loginForm.password }))
+    if (!loginForm.email || !loginForm.password) {
+      Alert.alert('', 'Please fill all fields.');
+      return;
+    }
+    dispatch(loginUser({email: loginForm.email, password: loginForm.password}))
+        .unwrap()
+          .then(() => {
+            navigation.navigate('home');
+          })
   };
 
   return (
     <LinearGradient colors={['#6200EE', '#FF6F61']} style={styles.container}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
         <ScrollView contentContainerStyle={styles.scrollView}>
           <Text style={styles.title}>Welcome Back!</Text>
           <Text style={styles.subtitle}>Login to your account</Text>
@@ -86,7 +80,7 @@ const Login = ({ navigation }) => {
               placeholder="Email"
               placeholderTextColor="#ccc"
               value={loginForm.email}
-              onChangeText={(value) => handleChange('email', value)}
+              onChangeText={value => handleChange('email', value)}
               keyboardType="email-address"
               autoCapitalize="none"
             />
@@ -105,7 +99,7 @@ const Login = ({ navigation }) => {
               placeholder="Password"
               placeholderTextColor="#ccc"
               value={loginForm.password}
-              onChangeText={(value) => handleChange('password', value)}
+              onChangeText={value => handleChange('password', value)}
               secureTextEntry
               autoCapitalize="none"
             />
@@ -115,8 +109,7 @@ const Login = ({ navigation }) => {
           <TouchableOpacity
             style={[styles.button, loginLoading && styles.buttonDisabled]}
             onPress={handleSubmit}
-            disabled={loginLoading}
-          >
+            disabled={loginLoading}>
             <Text style={styles.buttonText}>
               {loginLoading ? 'Logging in...' : 'Login'}
             </Text>
@@ -157,7 +150,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
     textShadowColor: 'rgba(0, 0, 0, 0.25)',
-    textShadowOffset: { width: 1, height: 1 },
+    textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 4,
     marginBottom: height * 0.02,
     textAlign: 'center',

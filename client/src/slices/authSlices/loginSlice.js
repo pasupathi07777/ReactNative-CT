@@ -2,9 +2,8 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {validateFields} from '../../utils/validationFunction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getToken} from '../../utils/tokenFunction';
-import { axiosInstance } from '../../utils/axios';
-import { Alert } from 'react-native';
-
+import {axiosInstance} from '../../utils/axios';
+import {Alert} from 'react-native';
 
 
 export const loginUser = createAsyncThunk(
@@ -16,8 +15,8 @@ export const loginUser = createAsyncThunk(
         return rejectWithValue({error});
       }
       const response = await axiosInstance.post(`/auth/login`, credentials);
-      if (response.data.user) {
-        await AsyncStorage.setItem('Token', response.data.user.token);
+      if (response.data.token) {
+        await AsyncStorage.setItem('Token', response.data.token);
         const token = await AsyncStorage.getItem('Token');
         console.log(`Token: ${token}`);
       }
@@ -49,7 +48,7 @@ export const logout = createAsyncThunk(
   'auth/logout',
   async (_, {rejectWithValue}) => {
     try {
-      await AsyncStorage.removeItem('authToken');
+      await AsyncStorage.removeItem('Token');
       return {};
     } catch (err) {
       return rejectWithValue({message: 'Error during logout'});
@@ -67,7 +66,9 @@ const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-
+    updateCurrentUser: (state, action) => {
+      state.currentUser = {...state.currentUser, ...action.payload};
+    },
   },
   extraReducers: builder => {
     builder
@@ -76,13 +77,16 @@ const loginSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loginLoading = false;
+        console.log(action.payload,"logi");
         state.currentUser = action.payload.user;
         state.loginStatus = true;
-        Alert.alert('',  'Login successful.');
+        Alert.alert('', 'Login successful.');
+        console.log(state.currentUser);
+        
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginLoading = false;
-         Alert.alert('', action.payload.error.message || 'Something went wrong');
+        Alert.alert('', action.payload.error.message || 'Something went wrong');
       })
 
       .addCase(getUserAuth.pending, state => {
@@ -96,17 +100,17 @@ const loginSlice = createSlice({
       })
       .addCase(getUserAuth.rejected, (state, action) => {
         state.loginLoading = false;
-        console.log(action.payload, 'action.payload'); 
+        console.log(action.payload, 'action.payload');
       })
 
       .addCase(logout.fulfilled, state => {
         state.currentUser = {};
         state.loginStatus = false;
-        state.loginForm = initialState.loginForm;
+
       });
   },
 });
 
-export const {} = loginSlice.actions;
+export const {updateCurrentUser} = loginSlice.actions;
 export const loginState = state => state.loginReducer;
 export default loginSlice.reducer;

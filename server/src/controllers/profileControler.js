@@ -5,10 +5,11 @@ import { generateOTP } from "../utils/generateOTP.js";
 import nodemailer from "nodemailer";
 // update profile
 export const updateProfile = async (req, res) => {
-  const { username, phone, department, bio, regNumber } = req.body;
-  const { userId } = req.params;
+  const { username, phone, department, bio, regNumber } = req.body.data;
+  console.log(req.body);
+
   try {
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: req.user._id });
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -23,7 +24,6 @@ export const updateProfile = async (req, res) => {
       username,
       phone,
       department,
-      regNumber,
     });
     if (validationErrors.length > 0) {
       return res.status(400).json({
@@ -35,9 +35,19 @@ export const updateProfile = async (req, res) => {
       });
     }
 
+    if (user.role === "student" && !regNumber) {
+      return res.status(400).json({
+        success: false,
+        errors: {
+          field: "regNumber",
+          message: "RegNumber Required",
+        },
+      });
+    }
+
     const existingUsername = await User.findOne({
       username,
-      _id: { $ne: userId },
+      _id: { $ne: req.user._id },
     });
 
     if (existingUsername) {
@@ -52,7 +62,7 @@ export const updateProfile = async (req, res) => {
 
     const existingRegNumber = await User.findOne({
       regNumber,
-      _id: { $ne: userId },
+      _id: { $ne: req.user._id },
     });
 
     if (existingRegNumber) {
@@ -67,7 +77,7 @@ export const updateProfile = async (req, res) => {
 
     const existingPhoneNumer = await User.findOne({
       phone,
-      _id: { $ne: userId },
+      _id: { $ne: req.user._id },
     });
 
     if (existingPhoneNumer) {
@@ -84,6 +94,7 @@ export const updateProfile = async (req, res) => {
       (user.phone = phone ?? user.phone),
       (user.department = department ?? user.department),
       (user.bio = bio ?? user.bio),
+      (user.regNumber = regNumber ?? user.regNumber),
       await user.save();
 
     return res.status(201).json({
@@ -106,10 +117,11 @@ export const updateProfile = async (req, res) => {
 // update profile photo
 export const updateProfilePhoto = async (req, res) => {
   const { profilePic } = req.body;
-  const { userId } = req.params;
+  // const { userId } = req.params;
+  console.log(req.body, "updateProfilePhoto");
 
   try {
-    const user = await User.findOne({ _id: userId });
+    const user = await User.find({ _id: req.user._id });
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -139,10 +151,10 @@ export const updateProfilePhoto = async (req, res) => {
         },
       });
     }
-    t;
+
     const uploadResponse = await cloudinary.uploader.upload(profilePic);
     const updatedUser = await User.findByIdAndUpdate(
-      userId,
+      req.user._id,
       { profilePic: uploadResponse.secure_url },
       { new: true }
     );
@@ -153,7 +165,7 @@ export const updateProfilePhoto = async (req, res) => {
       user: updatedUser,
     });
   } catch (error) {
-    console.error("Error in signup controller:", error.message);
+    console.error("Error in signup controller:", error);
     return res.status(500).json({
       success: false,
       errors: {
@@ -288,16 +300,15 @@ export const verifyOtp = async (req, res) => {
       });
     }
 
-     user.otp = undefined;
-     user.otpExpiry = undefined;
-     await user.save();
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
 
-     return res.status(200).json({
-       success: true,
-       message: "OTP verified successfully.",
-     });
+    return res.status(200).json({
+      success: true,
+      message: "OTP verified successfully.",
+    });
   } catch (error) {
-
     return res.status(500).json({
       success: false,
       errors: {

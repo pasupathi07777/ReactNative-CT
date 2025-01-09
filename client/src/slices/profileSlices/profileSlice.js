@@ -1,60 +1,88 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import axios from 'axios';
-import backendUrl from '../../api/backendUrl';
+import {axiosInstance} from '../../utils/axios';
+import {getToken} from '../../utils/tokenFunction';
+import {updateCurrentUser} from '../authSlices/loginSlice';
+import {Alert} from 'react-native';
+import {validateFields} from '../../utils/validationFunction';
 
-const PORT = backendUrl();
-export const verifyOtp = createAsyncThunk(
-  'otp/verifyOtp',
-  async (data, thunkAPI) => {
-    const {otpCode, verfiyEmail} = data;
+export const updateProfilePhoto = createAsyncThunk(
+  'update/profilePhoto',
+  async (profilePic, {rejectWithValue, dispatch}) => {
     try {
-      const response = await axios.post(`${PORT}/api/auth/verifyOTP`, {
-        otp: otpCode,
-        email: verfiyEmail,
+      const response = await axiosInstance.put(`/profile/update-photo`, {
+        profilePic,
+        token: await getToken(),
       });
+      dispatch(updateCurrentUser(response.data.user));
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(
+      return rejectWithValue(
         error?.response?.data || error.message || 'Something went wrong',
       );
     }
   },
 );
 
-// OTP Slice
+export const updateProfileDetails = createAsyncThunk(
+  'update/profileDetails',
+  async (data, {rejectWithValue, dispatch}) => {
+    try {
+      const error = validateFields(data);
+      if (error) {
+        return rejectWithValue({error});
+      }
+      const response = await axiosInstance.put(`/profile/update-details`, {
+        data,
+        token: await getToken(),
+      });
+      dispatch(updateCurrentUser(response.data.user));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data || error.message || 'Something went wrong',
+      );
+    }
+  },
+);
+
 export const profileSlice = createSlice({
   name: 'profile',
   initialState: {
-    editProfile:false
-
+    updateProfileLoading: false,
+    updateProfileDetailsLoading: false,
   },
-  reducers: {
-    setEdiProfile:(state)=>{
-        state.editProfile=!state.editProfile
-    }
-
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
-    //   .addCase(verifyOtp.pending, state => {
-    //     state.loading = true;
-    //     state.error = null;
-    //     state.success = false;
-    //   })
-    //   .addCase(verifyOtp.fulfilled, (state, action) => {
-    //     state.loading = false;
-    //     state.success = true;
-    //     console.debug('OTP Verified:', action.payload);
-    //     state.otp = ['', '', '', '', ''];
-    //   })
-    //   .addCase(verifyOtp.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.OtpErrors = action.payload.error.error || 'Failed to verify OTP';
-    //     console.error('OTP verification error:', action.payload.error.error);
-    //   });
+
+      .addCase(updateProfilePhoto.pending, state => {
+        state.updateProfileLoading = true;
+      })
+      .addCase(updateProfilePhoto.fulfilled, (state, action) => {
+        state.updateProfileLoading = false;
+        console.log(action.payload);
+      })
+      .addCase(updateProfilePhoto.rejected, (state, action) => {
+        state.updateProfileLoading = false;
+        console.log(action.payload);
+      })
+
+      .addCase(updateProfileDetails.pending, state => {
+        state.updateProfileDetailsLoading = true;
+      })
+      .addCase(updateProfileDetails.fulfilled, (state, action) => {
+        state.updateProfileDetailsLoading = false;
+        Alert.alert('', 'Profile Updated Successfully.');
+
+      })
+      .addCase(updateProfileDetails.rejected, (state, action) => {
+        state.updateProfileDetailsLoading = false;
+        console.log(action.payload);
+        Alert.alert('', action.payload.error.message);
+      });
   },
 });
 
-export const {setEdiProfile} = profileSlice.actions;
+export const {} = profileSlice.actions;
 export const profileState = state => state.profileReducer;
 export default profileSlice.reducer;

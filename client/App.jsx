@@ -17,6 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AddUser from './src/screens/subScreen/AddUser';
+import EditProfile from './src/screens/subScreen/EditProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,6 +42,7 @@ function MyTabs() {
           tabBarIcon: ({color, size}) => (
             <AntDesign name={'home'} size={22} color={'#000'} />
           ),
+          tabBarActiveTintColor: '#007bff',
         }}
       />
       <Tab.Screen
@@ -54,6 +56,7 @@ function MyTabs() {
               color={'#000'}
             />
           ),
+          tabBarActiveTintColor: '#007bff',
         }}
       />
       <Tab.Screen
@@ -63,6 +66,7 @@ function MyTabs() {
           tabBarIcon: ({color, size}) => (
             <Ionicons name={'add-circle-outline'} size={22} color={'#000'} />
           ),
+          tabBarActiveTintColor: '#007bff',
         }}
       />
       <Tab.Screen
@@ -72,19 +76,20 @@ function MyTabs() {
           tabBarIcon: ({color, size}) => (
             <Ionicons name={'notifications-outline'} size={22} color={'#000'} />
           ),
+          tabBarActiveTintColor: '#007bff',
         }}
       />
       <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
-          // tabBarLabel: () => null,
+          tabBarLabel: 'Profile',
           tabBarIcon: ({color, size}) => (
-            <Feather name={'user'} size={22} color={'#000'} />
+            <Feather name={'user'} size={22} color={'#fff'} />
           ),
+          tabBarActiveTintColor: '#007bff',
         }}
       />
-
     </Tab.Navigator>
   );
 }
@@ -104,6 +109,7 @@ function RootStack() {
       {/* <Stack.Screen name="addStudent" component={AddStudent} />
       <Stack.Screen name="addStaff" component={AddStaff} /> */}
       <Stack.Screen name="adduser" component={AddUser} />
+      <Stack.Screen name="editProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 }

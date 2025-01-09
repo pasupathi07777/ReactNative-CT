@@ -4,7 +4,7 @@ export function validateFields(inputData) {
   for (const field in inputData) {
     const value = inputData[field]?.trim();
 
-    if (!value && field !== 'regNumber') {
+    if (!value && field !== 'regNumber' && field !== 'bio') {
       return {
         field,
         message: `${field} is required`,
@@ -40,10 +40,10 @@ export function validateFields(inputData) {
         break;
 
       case 'username':
-        if (value.length < 2 || value.length > 50) {
+        if (value.length < 4 || value.length > 15) {
           return {
             field,
-            message: 'Username must be 2–50 characters',
+            message: 'Username must be 4–15 characters',
           };
         }
         break;

@@ -1,8 +1,7 @@
 import { ActivityIndicator, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-
+ 
 const { width, height } = Dimensions.get('window');
-
 const ButtonField = ({ title, onPress, loading }) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress} disabled={loading}>
@@ -22,7 +21,7 @@ export default ButtonField;
 const styles = StyleSheet.create({
   button: {
     height: 50,
-    backgroundColor: '#007BFF', // Button color (can be changed)
+    backgroundColor: '#007BFF', 
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -36,10 +35,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: '#fff', // White text color
+    color: '#fff', 
     fontWeight: 'bold',
   },
   loader: {
-    marginRight: 10, // Adds space between loader and text
+    marginRight: 10,
   },
 });
