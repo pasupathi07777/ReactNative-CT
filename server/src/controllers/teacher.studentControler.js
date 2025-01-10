@@ -1,10 +1,6 @@
 import User from "../models/user.model.js";
-import { validateFields } from "../utils/functions.js";
 
-// update profile
 export const getTecStu = async (req, res) => {
-
-
 
   try {
     const user = await User.find();
@@ -22,7 +18,9 @@ export const getTecStu = async (req, res) => {
       success: true,
       message: "Updated Successfully",
       user,
-    });
+    })
+
+
   } catch (error) {
     console.error("Error in signup controller:", error.message);
     return res.status(500).json({

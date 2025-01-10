@@ -17,6 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoute);
 app.use("/api/stu-tec", teacherStudentRoute);
 
+
 app.listen(5000,'0.0.0.0', () => {
   console.log("server is running on PORT:" + 5000);
   connedtDb();

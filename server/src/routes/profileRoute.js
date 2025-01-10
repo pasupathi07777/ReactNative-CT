@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.put("/update-details", protectRoute, updateProfile);
 router.put("/update-photo",protectRoute, updateProfilePhoto);
-router.post("/verify-email/:userId", verifyEmail);
-router.post("/verify-otp/:userId", verifyOtp);
+router.post("/verify-email",protectRoute, verifyEmail);
+router.post("/verify-otp",protectRoute, verifyOtp);
 
 
 export default router;

@@ -8,7 +8,7 @@ import {profileState} from '../../slices/profileSlices/profileSlice';
 const DynamicProfile = ({navigation}) => {
   const {currentUser} = useSelector(loginState);
   const {updateProfileLoading} = useSelector(profileState);
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const staffDetails = {
     username: currentUser.username ?? 'none',
@@ -47,18 +47,17 @@ const DynamicProfile = ({navigation}) => {
     console.log('Go Live clicked');
   };
   const onEditEmail = () => {
-    console.log('Go Live clicked');
+    navigation.navigate('editEmail');
   };
   const onEditPhoto = () => {
     console.log('Go Live clicked');
   };
   const onLogout = () => {
-dispatch(logout())
-  .unwrap()
-  .then(() => {
-    navigation.navigate("login");
-  });
-
+    dispatch(logout())
+      .unwrap()
+      .then(() => {
+        navigation.navigate('login');
+      });
   };
 
   return (

@@ -17,9 +17,9 @@ const EditProfile = ({navigation}) => {
   const {currentUser} = useSelector(loginState);
 
   const [editDetails, setEditDetails] = useState({
-    username: currentUser.username || 'pasupathi',
-    phone: currentUser.phone || '1234567890',
-    department: currentUser.department || 'CSC',
+    username: currentUser.username || '',
+    phone: currentUser.phone || '',
+    department: currentUser.department || '',
     bio: currentUser.bio,
     regNumber: currentUser.regNumber || '',
   });

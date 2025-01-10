@@ -18,11 +18,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AddUser from './src/screens/subScreen/AddUser';
 import EditProfile from './src/screens/subScreen/EditProfile';
+import EditEmail from './src/screens/subScreen/EditEmail';
+import OtpScreen from './src/screens/subScreen/OtpScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
 
 function MyTabs() {
   return (
@@ -103,6 +103,7 @@ function RootStack() {
       <Stack.Screen name="signup" component={Signup} />
       <Stack.Screen name="EmailVerify" component={EmailVerify} />
       <Stack.Screen name="verifyOtp" component={VerifyOtp} />
+      <Stack.Screen name="OtpScreen" component={OtpScreen} />
       <Stack.Screen name="home" component={MyTabs} />
       <Stack.Screen name="firstLoaderScreen" component={FirstLoaderScreen} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
@@ -110,13 +111,14 @@ function RootStack() {
       <Stack.Screen name="addStaff" component={AddStaff} /> */}
       <Stack.Screen name="adduser" component={AddUser} />
       <Stack.Screen name="editProfile" component={EditProfile} />
+      <Stack.Screen name="editEmail" component={EditEmail} />
     </Stack.Navigator>
   );
 }
 
 export default function App() {
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       <RootStack />
     </NavigationContainer>
   );

@@ -2,7 +2,6 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import backendUrl from '../../api/backendUrl';
 
-
 const PORT = backendUrl();
 export const verifyOtp = createAsyncThunk(
   'otp/verifyOtp',
@@ -63,11 +62,11 @@ export const otpSlice = createSlice({
         state.loading = false;
         state.success = true;
         console.debug('OTP Verified:', action.payload);
-        state.otp=['', '', '', '', '']
+        state.otp = ['', '', '', '', ''];
       })
       .addCase(verifyOtp.rejected, (state, action) => {
         state.loading = false;
-        state.OtpErrors = action.payload.error.error  || 'Failed to verify OTP';
+        state.OtpErrors = action.payload.error.error || 'Failed to verify OTP';
         console.error('OTP verification error:', action.payload.error.error);
       });
   },

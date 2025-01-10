@@ -3,6 +3,7 @@ import cloudinary from "../utils/cloudinary.js";
 import { validateFields } from "../utils/functions.js";
 import { generateOTP } from "../utils/generateOTP.js";
 import nodemailer from "nodemailer";
+
 // update profile
 export const updateProfile = async (req, res) => {
   const { username, phone, department, bio, regNumber } = req.body.data;
@@ -178,16 +179,18 @@ export const updateProfilePhoto = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
   const { email } = req.body;
-  const { userId } = req.params;
+  console.log(req.body);
+  
+
 
   try {
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: req.user._id });
     if (!user) {
       return res.status(400).json({
         success: false,
-        errors: {
+        error: {
           field: "user",
-          error: "user does not exist",
+          message: "user does not exist",
         },
       });
     }
@@ -195,9 +198,9 @@ export const verifyEmail = async (req, res) => {
     if (!email) {
       return res.status(400).json({
         success: false,
-        errors: {
+        error: {
           field: "email",
-          error: "email pic is required",
+          message: "email pic is required",
         },
       });
     }
@@ -205,7 +208,7 @@ export const verifyEmail = async (req, res) => {
     if (email === user.email) {
       return res.status(400).json({
         success: false,
-        errors: {
+        error: {
           field: "email",
           message: "New email must be different from the current email",
         },
@@ -246,9 +249,9 @@ export const verifyEmail = async (req, res) => {
     console.error("Error in signup controller:", error.message);
     return res.status(500).json({
       success: false,
-      errors: {
+      error: {
         field: "other",
-        error: "Internal Server Error",
+        message: "Internal Server Error",
       },
     });
   }
@@ -256,16 +259,16 @@ export const verifyEmail = async (req, res) => {
 
 export const verifyOtp = async (req, res) => {
   const { otp } = req.body;
-  const { userId } = req.params;
+
 
   try {
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: req.user._id });
     if (!user) {
       return res.status(400).json({
         success: false,
-        errors: {
+        error: {
           field: "user",
-          error: "user does not exist",
+          message: "user does not exist",
         },
       });
     }
@@ -273,47 +276,49 @@ export const verifyOtp = async (req, res) => {
     if (!otp) {
       return res.status(400).json({
         success: false,
-        errors: {
+        error: {
           field: "otp",
-          error: "Otp is required",
+          message: "Otp is required",
         },
       });
     }
     if (!user.otp || !user.otpExpiry) {
       return res.status(400).json({
         success: false,
-        error: { field: "otp", error: "No OTP found" },
+        error: { field: "otp", message: "No OTP found" },
       });
     }
 
     if (user.otp !== otp) {
       return res.status(400).json({
         success: false,
-        error: { field: "otp", error: "Invalid OTP" },
+        error: { field: "otp", message: "Invalid OTP" },
       });
     }
 
     if (new Date(user.otpExpiry).getTime() < Date.now()) {
       return res.status(400).json({
         success: false,
-        error: { field: "otp", error: "OTP has expired" },
+        error: { field: "otp", message: "OTP has expired" },
       });
     }
 
     user.otp = undefined;
     user.otpExpiry = undefined;
+    user.email = user.updatePendingData
     await user.save();
 
     return res.status(200).json({
       success: true,
       message: "OTP verified successfully.",
+      user
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      errors: {
+      error: {
         field: "other",
-        error: "Internal Server Error",
+        message: "Internal Server Error",
       },
     });
   }
