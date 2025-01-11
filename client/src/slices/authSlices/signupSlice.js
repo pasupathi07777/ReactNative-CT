@@ -24,9 +24,7 @@ export const signupUser = createAsyncThunk(
 );
 
 const initialState = {
-
   loading: false,
-
 };
 
 export const signupSlice = createSlice({

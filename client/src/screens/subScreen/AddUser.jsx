@@ -10,14 +10,14 @@ import { signupState, signupUser } from '../../slices/authSlices/signupSlice';
 
 const AddUser = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { loading} = useSelector(signupState);
+    const {loading} = useSelector(signupState);
 
     const [userDetails, setUserDetails] = useState({
-        username: 'pasupathi',
-        email: 'pasu@gmail.com',
-        password: '1234567890',
-        role:"staff",
-        regNumber:"123456789012"
+        username: '',
+        email: '',
+        password: '',
+        role:"",
+        regNumber:""
     });
 
     const handleInputChange = (field, value) => {
@@ -37,49 +37,53 @@ const AddUser = ({ navigation }) => {
         }
       
          dispatch(signupUser(userDetails))
+           .unwrap()
+           .then(() => {
+             navigation.goBack()
+           });
       };
       
 
     return (
-        <View style={styles.container}>
-            <Header topic="Add User" navigation={navigation} />
-            <View style={styles.formContainer}>
-                <InputFeild
-                    placeholder="Username"
-                    value={userDetails.username}
-                    onChangeText={(text) => handleInputChange('username', text)}
-                />
-                <InputFeild
-                    placeholder="Email"
-                    keyboardType="email-address"
-                    value={userDetails.email}
-                    onChangeText={(text) => handleInputChange('email', text)}
-                />
+      <View style={styles.container}>
+        <Header topic="Add User" navigation={navigation} />
+        <View style={styles.formContainer}>
+          <InputFeild
+            placeholder="Username"
+            value={userDetails.username}
+            onChangeText={text => handleInputChange('username', text)}
+          />
+          <InputFeild
+            placeholder="Email"
+            keyboardType="email-address"
+            value={userDetails.email}
+            onChangeText={text => handleInputChange('email', text)}
+          />
 
-                <SelectPicker
-                    selectedValue={userDetails.role}
-                    onValueChange={itemValue =>
-                        handleInputChange('role', itemValue)
-                    }
-                />
-             {
-                    userDetails.role === 'student' && (
-                        <InputFeild
-                        placeholder="Registration Number"
-                        value={userDetails.regNumber}
-                        onChangeText={(text) => handleInputChange('regNumber', text)}
-                    />
-                    )
-             }
-                <InputFeild
-                    placeholder="Password"
-                    secureTextEntry
-                    value={userDetails.password}
-                    onChangeText={(text) => handleInputChange('password', text)}
-                />
-                <ButtonField title="Submit" onPress={handleSubmit} loading={loading} />
-            </View>
+          <SelectPicker
+            selectedValue={userDetails.role}
+            onValueChange={itemValue => handleInputChange('role', itemValue)}
+          />
+          {userDetails.role === 'student' && (
+            <InputFeild
+              placeholder="Registration Number"
+              value={userDetails.regNumber}
+              onChangeText={text => handleInputChange('regNumber', text)}
+            />
+          )}
+          <InputFeild
+            placeholder="Password"
+            secureTextEntry
+            value={userDetails.password}
+            onChangeText={text => handleInputChange('password', text)}
+          />
+          <ButtonField
+            title="Submit"
+            onPress={handleSubmit}
+            loading={loading} 
+          />
         </View>
+      </View>
     );
 };
 

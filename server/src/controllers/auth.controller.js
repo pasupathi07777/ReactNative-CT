@@ -4,13 +4,12 @@ import bcrypt from "bcryptjs";
 import { validateFields } from "../utils/functions.js";
 import nodemailer from "nodemailer";
 
-
 // signup
 
 export const signup = async (req, res) => {
   console.log(req.body);
   const { username, email, password, role, regNumber } = req.body;
-console.log(req.body);
+  console.log(req.body);
 
   try {
     // Validate required fields
@@ -20,14 +19,12 @@ console.log(req.body);
       password,
       role,
     });
+    console.log(validationErrors);
 
-    if (validationErrors.length > 0) {
+    if (validationErrors) {
       return res.status(400).json({
         success: false,
-        error: validationErrors.map((error) => ({
-          field: error.field,
-          message: error.error,
-        })),
+        error: validationErrors,
       });
     }
 
@@ -37,20 +34,20 @@ console.log(req.body);
       return res.status(400).json({
         success: false,
         error: {
-          field: 'username',
-          message: 'Username already exists',
+          field: "username",
+          message: "Username already exists",
         },
       });
     }
 
     // Validate and check registration number if the role is "student"
-    if (role === 'student') {
+    if (role === "student") {
       if (!regNumber) {
         return res.status(400).json({
           success: false,
           error: {
-            field: 'regNumber',
-            message: 'Registration number is required for students',
+            field: "regNumber",
+            message: "Registration number is required for students",
           },
         });
       }
@@ -59,8 +56,8 @@ console.log(req.body);
         return res.status(400).json({
           success: false,
           error: {
-            field: 'regNumber',
-            message: 'Registration number must be exactly 12 digits',
+            field: "regNumber",
+            message: "Registration number must be exactly 12 digits",
           },
         });
       }
@@ -70,8 +67,8 @@ console.log(req.body);
         return res.status(400).json({
           success: false,
           error: {
-            field: 'regNumber',
-            message: 'Registration number already exists',
+            field: "regNumber",
+            message: "Registration number already exists",
           },
         });
       }
@@ -83,8 +80,8 @@ console.log(req.body);
       return res.status(400).json({
         success: false,
         error: {
-          field: 'email',
-          message: 'Email already exists',
+          field: "email",
+          message: "Email already exists",
         },
       });
     }
@@ -95,7 +92,7 @@ console.log(req.body);
       email,
       password, // Ensure you hash the password before saving
       role,
-      regNumber: role === 'student' ? regNumber : '',
+      regNumber: role === "student" ? regNumber : "",
     });
 
     await newUser.save();
@@ -111,18 +108,17 @@ console.log(req.body);
       },
     });
   } catch (error) {
-    console.error('Error signing up:', error);
+    console.error("Error signing up:", error);
 
     return res.status(500).json({
       success: false,
       error: {
-        field: 'other',
-        message: 'Internal Server Error',
+        field: "other",
+        message: "Internal Server Error",
       },
     });
   }
 };
-
 
 // login
 export const login = async (req, res) => {
@@ -133,12 +129,10 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         succces: false,
-        error: 
-          {
-            field: "email",
-            message: "User does not exist",
-          },
-        
+        error: {
+          field: "email",
+          message: "User does not exist",
+        },
       });
     }
 
@@ -164,7 +158,6 @@ export const login = async (req, res) => {
     });
   }
 };
-
 
 // verify Email
 export const verfiyEmail = async (req, res) => {
@@ -368,6 +361,3 @@ export const checkAuth = async (req, res) => {
     res.status(500).json({ succces: false, error: "Internal server error" });
   }
 };
-
-
-

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Login from './src/screens/auth/Login';
 import Signup from './src/screens/auth/Signup';
 import EmailVerify from './src/screens/auth/EmailVerify';
@@ -20,6 +21,9 @@ import AddUser from './src/screens/subScreen/AddUser';
 import EditProfile from './src/screens/subScreen/EditProfile';
 import EditEmail from './src/screens/subScreen/EditEmail';
 import OtpScreen from './src/screens/subScreen/OtpScreen';
+import AllStaffs from './src/screens/subScreen/AllStaffs';
+import AllStudents from './src/screens/subScreen/AllStudents';
+import EditUserDeatils from './src/screens/subScreen/EditUserDeatils';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +98,19 @@ function MyTabs() {
   );
 }
 
+
+
+const TabM = createMaterialTopTabNavigator();
+
+function MyTabsM() {
+  return (
+    <TabM.Navigator>
+      <TabM.Screen name=" Staff" component={AllStaffs} />
+      <TabM.Screen name="Student" component={AllStudents} />
+    </TabM.Navigator>
+  );
+}
+
 function RootStack() {
   return (
     <Stack.Navigator
@@ -107,11 +124,11 @@ function RootStack() {
       <Stack.Screen name="home" component={MyTabs} />
       <Stack.Screen name="firstLoaderScreen" component={FirstLoaderScreen} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
-      {/* <Stack.Screen name="addStudent" component={AddStudent} />
-      <Stack.Screen name="addStaff" component={AddStaff} /> */}
       <Stack.Screen name="adduser" component={AddUser} />
       <Stack.Screen name="editProfile" component={EditProfile} />
       <Stack.Screen name="editEmail" component={EditEmail} />
+      <Stack.Screen name="viewAllUser" component={MyTabsM} />
+      <Stack.Screen name="editUserDetails" component={EditUserDeatils} />
     </Stack.Navigator>
   );
 }

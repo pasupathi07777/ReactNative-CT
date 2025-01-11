@@ -36,7 +36,7 @@ const DynamicProfile = ({navigation}) => {
   };
 
   const onViewAllStudents = () => {
-    console.log('View All Students clicked');
+    navigation.navigate('viewAllUser');
   };
 
   const onAddPost = () => {
@@ -48,6 +48,7 @@ const DynamicProfile = ({navigation}) => {
   };
   const onEditEmail = () => {
     navigation.navigate('editEmail');
+
   };
   const onEditPhoto = () => {
     console.log('Go Live clicked');
@@ -74,9 +75,6 @@ const DynamicProfile = ({navigation}) => {
         onEditPhoto={onEditPhoto}
         onLogout={onLogout}
       />
-      {/* <TouchableOpacity style={styles.button} onPress={onGoLive}>
-        <Text style={styles.buttonText}>Go Live</Text>
-      </TouchableOpacity> */}
     </ScrollView>
   );
 };

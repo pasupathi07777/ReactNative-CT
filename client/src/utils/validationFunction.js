@@ -4,7 +4,14 @@ export function validateFields(inputData) {
   for (const field in inputData) {
     const value = inputData[field]?.trim();
 
-    if (!value && field !== 'regNumber' && field !== 'bio') {
+    if (
+      !value &&
+      field !== 'regNumber' &&
+      field !== 'bio' &&
+      field !== 'phone' &&
+      field !== 'department' &&
+      field !== 'bio'
+    ) {
       return {
         field,
         message: `${field} is required`,
@@ -40,10 +47,10 @@ export function validateFields(inputData) {
         break;
 
       case 'username':
-        if (value.length < 4 || value.length > 15) {
+        if (value.length < 4 || value.length > 20) {
           return {
             field,
-            message: 'Username must be 4–15 characters',
+            message: 'Username must be 4–20 characters',
           };
         }
         break;
@@ -63,16 +70,8 @@ export function validateFields(inputData) {
         }
         break;
 
-      // default:
-      //   if (value.length < 1 || value.length > 100) {
-      //     return {
-      //       field,
-      //       message: `${field} must be 1–100 characters`,
-      //     };
-      //   }
-      //   break;
     }
   }
 
-  return null; // No errors found
+  return null; 
 }

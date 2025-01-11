@@ -109,7 +109,7 @@ const StaffProfile = ({
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Joining Date:</Text>
-          <Text style={styles.detailValue}>{staffDetails.joiningDate}</Text>
+          <Text style={styles.detailValue}>{staffDetails.joiningDate.slice(0,10)}</Text>
         </View>
         <View style={styles.bioRow}>
           <Text style={styles.detailLabel}>Bio</Text>
@@ -127,7 +127,7 @@ const StaffProfile = ({
           <Text style={styles.buttonText}>Add User</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onViewAllStudents}>
-          <Text style={styles.buttonText}>View All Students</Text>
+          <Text style={styles.buttonText}>View All User</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onAddPost}>
           <Text style={styles.buttonText}>Add Post</Text>
