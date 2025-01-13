@@ -6,9 +6,8 @@ import nodemailer from "nodemailer";
 
 // update profile
 export const updateProfile = async (req, res) => {
+  
   const { username, phone, department, bio, regNumber } = req.body.data;
-  console.log(req.body);
-
   try {
     const user = await User.findOne({ _id: req.user._id });
     if (!user) {
@@ -118,8 +117,7 @@ export const updateProfile = async (req, res) => {
 // update profile photo
 export const updateProfilePhoto = async (req, res) => {
   const { profilePic } = req.body;
-  // const { userId } = req.params;
-  console.log(req.body, "updateProfilePhoto");
+  // const { userId } = req.params;.
 
   try {
     const user = await User.find({ _id: req.user._id });

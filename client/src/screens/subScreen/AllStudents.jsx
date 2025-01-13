@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Alert,
@@ -23,8 +22,6 @@ const AllStudents = ({navigation}) => {
     allStudent,
     getAllUserLoading,
     currentUser,
-    editUser,
-    editUserLoading,
   } = useSelector(loginState);
 
   const dispatch = useDispatch();

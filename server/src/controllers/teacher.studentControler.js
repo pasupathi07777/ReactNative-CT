@@ -33,11 +33,20 @@ export const getTecStu = async (req, res) => {
   }
 };
 
+
 export const TeacherUpdateStudentDetails = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { email, username, password, phone, department, bio, regNumber,role } =
-      req.body;
+    const {
+      email,
+      username,
+      password,
+      phone,
+      department,
+      bio,
+      regNumber,
+      role,
+    } = req.body;
     console.log(userId, req.body);
 
     // Validate fields
@@ -106,15 +115,16 @@ export const TeacherUpdateStudentDetails = async (req, res) => {
     });
   }
 };
+
+
+
 export const TeacherDeleteStudent = async (req, res) => {
   try {
-  
-    
     const { userId } = req.params;
-      console.log(userId);
+    console.log(userId);
 
     // Find and delete the user
-    const user = await User.findByIdAndDelete(  userId );
+    const user = await User.findByIdAndDelete(userId);
 
     // If user is not found
     if (!user) {
@@ -143,4 +153,3 @@ export const TeacherDeleteStudent = async (req, res) => {
     });
   }
 };
-
